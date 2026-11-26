@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<title>dogwalk invite</title>
+<style>
+  :root { --bg: #ffffff; --fg: #1c1c1e; --muted: #6e6e73; --btn: #1c1c1e; --btn-fg: #ffffff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #000000; --fg: #f2f2f7; --muted: #a1a1a6; --btn: #f2f2f7; --btn-fg: #000000; }
+  }
+  html, body { margin: 0; background: var(--bg); color: var(--fg); }
+  body { font: 17px/1.45 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+  main { max-width: 28rem; margin: 0 auto; padding: 4rem 1.25rem; text-align: center; }
+  h1 { font-size: 1.6rem; margin: 0 0 0.75rem; }
+  p { margin: 0 0 1.25rem; }
+  .muted { color: var(--muted); font-size: 0.9rem; }
+  a.button { display: inline-block; padding: 0.85rem 1.6rem; border-radius: 999px;
+             background: var(--btn); color: var(--btn-fg); text-decoration: none; font-weight: 600; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <section id="invite" hidden>
+    <h1>You're invited on dogwalk</h1>
+    <p>Open this on the iPhone that has dogwalk.</p>
+    <p><a id="open" class="button">Open in dogwalk</a></p>
+    <p class="muted">No app yet? Ask the person who invited you.</p>
+  </section>
+  <section id="broken" hidden>
+    <h1>This invite link isn't complete.</h1>
+    <p>Ask for a new link.</p>
+  </section>
+</main>
+<script>
+(function () {
+  var path = location.pathname;
+  if (path.length > 1 && path.charAt(path.length - 1) === "/") path = path.slice(0, -1);
+  var parts = path.split("/");
+  var kind = parts.length >= 2 ? parts[parts.length - 2] : "";
+  var code = "";
+  try { code = decodeURIComponent(parts[parts.length - 1] || ""); } catch (e) { code = ""; }
+  var ok = (kind === "o" || kind === "p") && /^[A-Za-z0-9_-]{1,64}$/.test(code);
+  if (ok) {
+    document.getElementById("open").setAttribute("href", "dogwalk://" + kind + "/" + code);
+    document.getElementById("invite").hidden = false;
+  } else {
+    document.getElementById("broken").hidden = false;
+  }
+})();
+</script>
+</body>
+</html>
